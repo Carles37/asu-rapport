@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ASU – Rapport de Vol</title>
+
+    <style>
+        body {
+            background: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        section {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .bloc {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border-radius: 5px;
+            border: none;
+        }
+
+        textarea {
+            height: 120px;
+        }
+
+        button {
+            background: #004aad;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #0066ff;
+        }
+
+        /* --- VERSION MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .bloc {
+                padding: 12px;
+            }
+
+            input, select, textarea {
+                font-size: 15px;
+                padding: 10px;
+            }
+
+            textarea {
+                height: 100px;
+            }
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+                font-size: 17px;
+                padding: 14px;
+            }
+
+            img {
+                width: 110px !important;
+            }
+        }
+
+        /* --- ULTRA MOBILE --- */
+        @media (max-width: 420px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            section {
+                padding: 12px;
+            }
+
+            input, select, textarea {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+
+    <!-- Librairie PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+<h1>🛫 ASU – Rapport de Vol Officiel</h1>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <!-- Logo ASU / LSPD -->
+    <img src="https://i.imgur.com/8yZ8FhL.png" width="140">
+</div>
+
+<section id="rapport">
+    <h2>Informations du vol</h2>
+
+    <div class="bloc">
+        <label>Numéro de vol :</label>
+        <input id="vol" type="text" placeholder="Ex : ASU-01">
+
+        <label>Type de mission :</label>
+        <select id="mission">
+            <option>Surveillance aérienne</option>
+            <option>Appui au sol</option>
+            <option>Poursuite</option>
+            <option>Transport d’unité</option>
+            <option>Recherche / Secours</option>
+        </select>
+
+        <label>Zone d’opération :</label>
+        <input id="zone" type="text" placeholder="Ex : Downtown, Vespucci…">
+    </div>
+
+    <div class="bloc">
+        <h3>Équipage</h3>
+        <label>Pilote :</label>
+        <input id="pilote" type="text">
+
+        <label>Co-pilote :</label>
+        <input id="copilote" type="text">
+
+        <label>Technicien :</label>
+        <input id="technicien" type="text">
+    </div>
+
+    <div class="bloc">
+        <h3>Déroulement du vol</h3>
+        <label>Décollage :</label>
+        <input id="decollage" type="time">
+
+        <label>Atterrissage :</label>
+        <input id="atterrissage" type="time">
+
+        <label>Résumé :</label>
+        <textarea id="resume"></textarea>
+    </div>
+</section>
+
+<button id="pdfBtn">📄 Générer PDF</button>
+<button id="webhookBtn">📤 Envoyer au Discord</button>
+
+<script>
+/* -------- PDF -------- */
+document.getElementById("pdfBtn").addEventListener("click", () => {
+    const element = document.getElementById("rapport");
+
+    const opt = {
+        margin: 10,
+        filename: "ASU_Rapport.pdf",
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    };
+
+    html2pdf().set(opt).from(element).save();
+});
+
+/* -------- WEBHOOK DISCORD -------- */
+document.getElementById("webhookBtn").addEventListener("click", async () => {
+    const webhookURL = "TON_WEBHOOK_ICI"; // <-- mets ton webhook ici
+
+    const payload = {
+        username: "ASU – Rapport de Vol",
+        avatar_url: "https://i.imgur.com/8yZ8FhL.png",
+        embeds: [
+            {
+                title: "🛫 Rapport de Vol – ASU",
+                color: 3447003,
+                thumbnail: { url: "https://i.imgur.com/8yZ8FhL.png" },
+                fields: [
+                    { name: "Numéro de vol", value: document.getElementById("vol").value || "Non renseigné" },
+                    { name: "Mission", value: document.getElementById("mission").value },
+                    { name: "Zone", value: document.getElementById("zone").value || "Non renseigné" },
+
+                    { name: "Pilote", value: document.getElementById("pilote").value || "Non renseigné", inline: true },
+                    { name: "Co-pilote", value: document.getElementById("copilote").value || "Non renseigné", inline: true },
+                    { name: "Technicien", value: document.getElementById("technicien").value || "Non renseigné", inline: true },
+
+                    { name: "Décollage", value: document.getElementById("decollage").value || "Non renseigné", inline: true },
+                    { name: "Atterrissage", value: document.getElementById("atterrissage").value || "Non renseigné", inline: true },
+
+                    { name: "Résumé", value: document.getElementById("resume").value || "Aucun résumé fourni" }
+                ],
+                footer: {
+                    text: "LSPD – Air Support Unit",
+                    icon_url: "https://i.imgur.com/8yZ8FhL.png"
+                }
+            }
+        ]
+    };
+
+    await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    alert("Rapport envoyé au Discord !");
+});
+</script>
+
+</body>
+</html>
