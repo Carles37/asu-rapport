@@ -466,18 +466,21 @@ function envoyerRapport() {
 <script>
 async function genererEtEnvoyerPDF() {
 
-  const element = document.querySelector(".app");
+  // On capture TOUTE la page (important)
+  const element = document.body;
 
   const opt = {
     margin: 0.5,
     filename: "rapport_asu.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: { scale: 3, useCORS: true },
     jsPDF: { unit: "cm", format: "a4", orientation: "portrait" }
   };
 
+  // Génération du PDF
   const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
 
+  // Préparation pour Discord
   const formData = new FormData();
   formData.append("file", pdfBlob, "rapport_asu.pdf");
 
@@ -493,6 +496,7 @@ async function genererEtEnvoyerPDF() {
 
   formData.append("payload_json", JSON.stringify(payload));
 
+  // Envoi au webhook
   await fetch("https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT", {
     method: "POST",
     body: formData
@@ -504,4 +508,3 @@ async function genererEtEnvoyerPDF() {
 
 </body>
 </html>
-
