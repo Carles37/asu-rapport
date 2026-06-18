@@ -79,12 +79,6 @@
       justify-content: space-between;
       align-items: center;
     }
-    .section-title span {
-      font-size: 0.7rem;
-      color: #7f93b8;
-      text-transform: none;
-      letter-spacing: 0;
-    }
     .grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -104,11 +98,7 @@
       font-size: 0.78rem;
       color: #cfd8f5;
     }
-    input[type="text"],
-    input[type="number"],
-    input[type="datetime-local"],
-    textarea,
-    select {
+    input, textarea, select {
       background: rgba(5, 10, 25, 0.9);
       border-radius: 9px;
       border: 1px solid rgba(120, 180, 255, 0.35);
@@ -121,11 +111,6 @@
     textarea {
       min-height: 70px;
       resize: vertical;
-    }
-    input::placeholder,
-    textarea::placeholder {
-      color: #6f7fa5;
-      font-size: 0.75rem;
     }
     .chips {
       display: flex;
@@ -178,17 +163,6 @@
       color: #cfe2ff;
       cursor: pointer;
     }
-    .hint {
-      font-size: 0.7rem;
-      color: #7f93b8;
-      text-align: center;
-      margin-top: 2px;
-    }
-    @media (max-width: 640px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .app { padding: 14px 12px 20px; }
-      header { flex-direction: column; align-items: flex-start; gap: 6px; }
-    }
   </style>
 </head>
 <body>
@@ -198,25 +172,22 @@
         <h1>ASU - Rapport de vol</h1>
         <div class="subtitle">Unité aérienne | Modèle opérationnel complet</div>
       </div>
-      <div class="badge">BAMAKO • LIVE OPS</div>
+      <div class="badge">CARLES37000 • LIVE OPS</div>
     </header>
 
     <form id="asuForm">
-      <!-- SECTION 1 : Infos vol -->
+
+            <!-- SECTION 1 -->
       <div class="section">
-        <div class="section-title">
-          Informations vol
-          <span>Identité mission & aéronef</span>
-        </div>
+        <div class="section-title">Informations vol</div>
         <div class="grid-2">
           <div class="field">
             <label>Numéro de vol</label>
-            <input type="text" id="vol" placeholder="Ex : ASU-01 / AIR-1">
+            <input id="vol">
           </div>
           <div class="field">
             <label>Type de mission</label>
             <select id="mission">
-              <option value="">Sélectionner…</option>
               <option>Surveillance</option>
               <option>Appui au sol</option>
               <option>Poursuite</option>
@@ -230,43 +201,37 @@
         <div class="grid-2" style="margin-top:8px;">
           <div class="field">
             <label>Zone d’opération</label>
-            <input type="text" id="zone" placeholder="Ex : Downtown, Vespucci, Sandy…">
+            <input id="zone">
           </div>
           <div class="field">
             <label>Type d’appareil</label>
-            <input type="text" id="appareil" placeholder="Ex : Hélico ASU, Air-1…">
+            <input id="appareil">
           </div>
         </div>
       </div>
 
-      <!-- SECTION 2 : Équipage -->
+      <!-- SECTION 2 -->
       <div class="section">
-        <div class="section-title">
-          Équipage
-          <span>Composition & rôles</span>
-        </div>
+        <div class="section-title">Équipage</div>
         <div class="grid-3">
           <div class="field">
             <label>Pilote</label>
-            <input type="text" id="pilote" placeholder="Nom / indicatif">
+            <input id="pilote">
           </div>
           <div class="field">
             <label>Co-pilote</label>
-            <input type="text" id="copilote" placeholder="Nom / indicatif">
+            <input id="copilote">
           </div>
           <div class="field">
             <label>Tactique</label>
-            <input type="text" id="tactique" placeholder="Opérateur / observateur">
+            <input id="tactique">
           </div>
         </div>
       </div>
 
-      <!-- SECTION 3 : Temps & déroulement -->
+      <!-- SECTION 3 -->
       <div class="section">
-        <div class="section-title">
-          Déroulement du vol
-          <span>Temps & résumé</span>
-        </div>
+        <div class="section-title">Déroulement du vol</div>
         <div class="grid-2">
           <div class="field">
             <label>Décollage</label>
@@ -278,281 +243,217 @@
           </div>
         </div>
 
-        <div class="grid-3" style="margin-top:8px;">
-          <div class="field">
-            <label>Temps moteur (min)</label>
-            <input type="number" id="tempsMoteur" min="0" placeholder="Ex : 45">
-          </div>
-          <div class="field">
-            <label>Temps rotor (min)</label>
-            <input type="number" id="tempsRotor" min="0" placeholder="Ex : 40">
-          </div>
-          <div class="field">
-            <label>Temps total mission (min)</label>
-            <input type="number" id="tempsTotal" min="0" placeholder="Ex : 60">
-          </div>
-        </div>
-
         <div class="field" style="margin-top:8px;">
           <label>Résumé du vol</label>
-          <textarea id="resume" placeholder="Décrire le déroulement global de la mission, les phases clés, les interventions, les points notables…"></textarea>
+          <textarea id="resume"></textarea>
         </div>
       </div>
 
-      <!-- SECTION 4 : Météo -->
+      <!-- SECTION 4 -->
       <div class="section">
-        <div class="section-title">
-          Météo
-          <span>Conditions au moment du vol</span>
-        </div>
+        <div class="section-title">Météo</div>
         <div class="grid-2">
           <div class="field">
-            <label>Vent (kt / direction)</label>
-            <input type="text" id="vent" placeholder="Ex : 8 kt / 230°">
+            <label>Vent</label>
+            <input id="vent">
           </div>
           <div class="field">
-            <label>QNH / Pression</label>
-            <input type="text" id="qnh" placeholder="Ex : 1015 hPa">
+            <label>QNH</label>
+            <input id="qnh">
           </div>
         </div>
 
         <div class="chips">
-          <label class="chip">
-            <input type="checkbox" id="meteoVentFaible"> Vent faible
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoVentModere"> Vent modéré
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoVentFort"> Vent fort
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoVisiBonne"> Visibilité bonne
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoVisiMoy"> Visibilité moyenne
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoVisiMauvaise"> Visibilité mauvaise
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoCielDegage"> Ciel dégagé
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoNuageux"> Nuageux
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoPluie"> Pluie
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoOrage"> Orage
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoJour"> Jour
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="meteoNuit"> Nuit
-          </label>
+          <label class="chip"><input type="checkbox" id="meteoVentFaible"> Vent faible</label>
+          <label class="chip"><input type="checkbox" id="meteoVentModere"> Vent modéré</label>
+          <label class="chip"><input type="checkbox" id="meteoVentFort"> Vent fort</label>
+          <label class="chip"><input type="checkbox" id="meteoVisiBonne"> Visibilité bonne</label>
+          <label class="chip"><input type="checkbox" id="meteoVisiMoy"> Visibilité moyenne</label>
+          <label class="chip"><input type="checkbox" id="meteoVisiMauvaise"> Visibilité mauvaise</label>
+          <label class="chip"><input type="checkbox" id="meteoCielDegage"> Ciel dégagé</label>
+          <label class="chip"><input type="checkbox" id="meteoNuageux"> Nuageux</label>
+          <label class="chip"><input type="checkbox" id="meteoPluie"> Pluie</label>
+          <label class="chip"><input type="checkbox" id="meteoOrage"> Orage</label>
+          <label class="chip"><input type="checkbox" id="meteoJour"> Jour</label>
+          <label class="chip"><input type="checkbox" id="meteoNuit"> Nuit</label>
         </div>
       </div>
 
-      <!-- SECTION 5 : Carburant -->
+      <!-- SECTION 5 -->
       <div class="section">
-        <div class="section-title">
-          Carburant
-          <span>Plein & consommation</span>
-        </div>
+        <div class="section-title">Carburant</div>
         <div class="grid-3">
           <div class="field">
-            <label>Carburant départ (L)</label>
-            <input type="number" id="carbDepart" min="0" placeholder="Ex : 600">
+            <label>Carburant départ</label>
+            <input id="carbDepart">
           </div>
           <div class="field">
-            <label>Carburant arrivée (L)</label>
-            <input type="number" id="carbArrivee" min="0" placeholder="Ex : 320">
+            <label>Carburant arrivée</label>
+            <input id="carbArrivee">
           </div>
           <div class="field">
-            <label>Consommation estimée (L)</label>
-            <input type="number" id="carbConso" min="0" placeholder="Ex : 280">
+            <label>Consommation</label>
+            <input id="carbConso">
           </div>
         </div>
 
         <div class="chips">
-          <label class="chip">
-            <input type="checkbox" id="pleinEffectue"> Plein effectué avant vol
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="pleinNonEffectue"> Plein non effectué
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="carbSuffisant"> Carburant suffisant
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="carbLimite"> Carburant limite
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="consoNormale"> Consommation normale
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="consoElevee"> Consommation élevée
-          </label>
+          <label class="chip"><input type="checkbox" id="pleinEffectue"> Plein effectué</label>
+          <label class="chip"><input type="checkbox" id="pleinNonEffectue"> Plein non effectué</label>
+          <label class="chip"><input type="checkbox" id="carbSuffisant"> Carburant suffisant</label>
+          <label class="chip"><input type="checkbox" id="carbLimite"> Carburant limite</label>
+          <label class="chip"><input type="checkbox" id="consoNormale"> Conso normale</label>
+          <label class="chip"><input type="checkbox" id="consoElevee"> Conso élevée</label>
         </div>
       </div>
 
-      <!-- SECTION 6 : Avaries / anomalies -->
+      <!-- SECTION 6 -->
       <div class="section">
-        <div class="section-title">
-          Avaries / anomalies
-          <span>Technique & ressenti équipage</span>
-        </div>
+        <div class="section-title">Avaries / anomalies</div>
         <div class="chips">
-          <label class="chip">
-            <input type="checkbox" id="avarieRAS"> RAS
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieRadio"> Problème radio
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieFLIR"> Problème caméra / FLIR
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieRotor"> Problème rotor
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieMoteur"> Problème moteur
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieInstruments"> Problème instruments
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieVibrations"> Vibrations anormales
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="avarieAlerte"> Alerte tableau de bord
-          </label>
+          <label class="chip"><input type="checkbox" id="avarieRAS"> RAS</label>
+          <label class="chip"><input type="checkbox" id="avarieRadio"> Radio</label>
+          <label class="chip"><input type="checkbox" id="avarieFLIR"> FLIR</label>
+          <label class="chip"><input type="checkbox" id="avarieRotor"> Rotor</label>
+          <label class="chip"><input type="checkbox" id="avarieMoteur"> Moteur</label>
+          <label class="chip"><input type="checkbox" id="avarieInstruments"> Instruments</label>
+          <label class="chip"><input type="checkbox" id="avarieVibrations"> Vibrations</label>
+          <label class="chip"><input type="checkbox" id="avarieAlerte"> Alerte tableau</label>
         </div>
+
         <div class="field" style="margin-top:8px;">
-          <label>Détails des avaries / remarques techniques</label>
-          <textarea id="avarieDetails" placeholder="Préciser les anomalies, leur impact sur le vol, les actions prises, recommandations maintenance…"></textarea>
+          <label>Détails</label>
+          <textarea id="avarieDetails"></textarea>
         </div>
       </div>
 
-      <!-- SECTION 7 : Conditions de vol & matériel -->
+      <!-- SECTION 7 -->
       <div class="section">
-        <div class="section-title">
-          Conditions & matériel
-          <span>Profil de vol & équipements</span>
-        </div>
+        <div class="section-title">Conditions & matériel</div>
         <div class="chips">
-          <label class="chip">
-            <input type="checkbox" id="condVFR"> VFR
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="condIFR"> IFR
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="turbFaible"> Turbulences faibles
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="turbModerees"> Turbulences modérées
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="turbFortes"> Turbulences fortes
-          </label>
+          <label class="chip"><input type="checkbox" id="condVFR"> VFR</label>
+          <label class="chip"><input type="checkbox" id="condIFR"> IFR</label>
+          <label class="chip"><input type="checkbox" id="turbFaible"> Turb faible</label>
+          <label class="chip"><input type="checkbox" id="turbModerees"> Turb modérées</label>
+          <label class="chip"><input type="checkbox" id="turbFortes"> Turb fortes</label>
         </div>
 
         <div class="chips" style="margin-top:6px;">
-          <label class="chip">
-            <input type="checkbox" id="matFLIR"> Caméra FLIR
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="matProjecteur"> Projecteur
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="matRadioLP"> Radio longue portée
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="matSecours"> Kit secours
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="matArmement"> Armement RP
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="matGPS"> GPS tactique
-          </label>
+          <label class="chip"><input type="checkbox" id="matFLIR"> FLIR</label>
+          <label class="chip"><input type="checkbox" id="matProjecteur"> Projecteur</label>
+          <label class="chip"><input type="checkbox" id="matRadioLP"> Radio LP</label>
+          <label class="chip"><input type="checkbox" id="matSecours"> Secours</label>
+          <label class="chip"><input type="checkbox" id="matArmement"> Armement</label>
+          <label class="chip"><input type="checkbox" id="matGPS"> GPS</label>
         </div>
       </div>
 
-      <!-- SECTION 8 : Observations tactiques & conclusion -->
+      <!-- SECTION 8 -->
       <div class="section">
-        <div class="section-title">
-          Observations & conclusion
-          <span>Résultat mission & remarques</span>
-        </div>
+        <div class="section-title">Observations & conclusion</div>
+
         <div class="chips">
-          <label class="chip">
-            <input type="checkbox" id="resMissionOK"> Mission accomplie
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="resMissionPartielle"> Mission partielle
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="resMissionAnnulee"> Mission annulée
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="resInterSol"> Intervention au sol nécessaire
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="resAucunIncident"> Aucun incident
-          </label>
+          <label class="chip"><input type="checkbox" id="resMissionOK"> Mission OK</label>
+          <label class="chip"><input type="checkbox" id="resMissionPartielle"> Partielle</label>
+          <label class="chip"><input type="checkbox" id="resMissionAnnulee"> Annulée</label>
+          <label class="chip"><input type="checkbox" id="resInterSol"> Intervention sol</label>
+          <label class="chip"><input type="checkbox" id="resAucunIncident"> Aucun incident</label>
         </div>
 
         <div class="field" style="margin-top:8px;">
           <label>Observations tactiques</label>
-          <textarea id="obsTactiques" placeholder="Zones survolées, points d’intérêt, contacts visuels, appui au sol, poursuites, interventions…"></textarea>
+          <textarea id="obsTactiques"></textarea>
         </div>
 
         <div class="grid-2" style="margin-top:8px;">
           <div class="field">
             <label>Recommandations</label>
-            <textarea id="recommandations" placeholder="Améliorations, points à surveiller, consignes futures…"></textarea>
+            <textarea id="recommandations"></textarea>
           </div>
           <div class="field">
-            <label>Signature pilote / indicatif</label>
-            <input type="text" id="signature" placeholder="Ex : AIR-1 / CARLES37000">
+            <label>Signature</label>
+            <input id="signature">
           </div>
         </div>
       </div>
 
       <!-- FOOTER -->
       <div class="footer-actions">
-        <button type="button" class="btn-primary">
-          Générer / envoyer le rapport
-        </button>
-        <button type="reset" class="btn-secondary">
-          Réinitialiser le formulaire
-        </button>
-        <div class="hint">
-          Ce modèle est prêt pour que tu branches ton script PDF + webhook Discord derrière.
-        </div>
+        <button type="button" class="btn-primary" onclick="envoyerRapport()">Envoyer le rapport</button>
+        <button type="reset" class="btn-secondary">Réinitialiser</button>
       </div>
+
     </form>
   </div>
-  <script>
+
+ <script>
 const webhookURL = "https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT";
 
-// Exemple d’envoi simple (je te ferai la version complète après)
 function envoyerRapport() {
-    const data = {
-        content: "Nouveau rapport ASU envoyé.",
-    };
 
-    fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
+  const get = id => document.getElementById(id)?.value || "";
+  const chk = ids => ids.filter(id => document.getElementById(id)?.checked)
+                        .map(id => document.getElementById(id).parentElement.innerText.trim())
+                        .join(", ") || "Aucun";
+
+  const embed = {
+    title: "📡 Rapport ASU – CARLES37000",
+    color: 3447003,
+    fields: [
+      { name: "Numéro de vol", value: get("vol") },
+      { name: "Mission", value: get("mission") },
+      { name: "Zone", value: get("zone") },
+      { name: "Appareil", value: get("appareil") },
+
+      { name: "Équipage", value:
+        `Pilote : ${get("pilote")}\nCo-pilote : ${get("copilote")}\nTactique : ${get("tactique")}` },
+
+      { name: "Déroulement", value:
+        `Décollage : ${get("decollage")}\nAtterrissage : ${get("atterrissage")}` },
+
+      { name: "Résumé du vol", value: get("resume") || "Aucun résumé" },
+
+      { name: "Météo", value:
+        `Vent : ${get("vent")}\nQNH : ${get("qnh")}\nConditions : ${
+          chk(["meteoVentFaible","meteoVentModere","meteoVentFort",
+               "meteoVisiBonne","meteoVisiMoy","meteoVisiMauvaise",
+               "meteoCielDegage","meteoNuageux","meteoPluie","meteoOrage",
+               "meteoJour","meteoNuit"])
+        }` },
+
+      { name: "Carburant", value:
+        `Départ : ${get("carbDepart")} L\nArrivée : ${get("carbArrivee")} L\nConso : ${get("carbConso")} L\nOptions : ${
+          chk(["pleinEffectue","pleinNonEffectue","carbSuffisant","carbLimite","consoNormale","consoElevee"])
+        }` },
+
+      { name: "Avaries", value:
+        `${chk(["avarieRAS","avarieRadio","avarieFLIR","avarieRotor",
+                "avarieMoteur","avarieInstruments","avarieVibrations","avarieAlerte"])}
+        
+        Détails : ${get("avarieDetails") || "RAS"}` },
+
+      { name: "Conditions de vol", value:
+        chk(["condVFR","condIFR","turbFaible","turbModerees","turbFortes"]) },
+
+      { name: "Matériel embarqué", value:
+        chk(["matFLIR","matProjecteur","matRadioLP","matSecours","matArmement","matGPS"]) },
+
+      { name: "Résultat mission", value:
+        chk(["resMissionOK","resMissionPartielle","resMissionAnnulee","resInterSol","resAucunIncident"]) },
+
+      { name: "Observations tactiques", value: get("obsTactiques") || "Aucune" },
+      { name: "Recommandations", value: get("recommandations") || "Aucune" },
+      { name: "Signature", value: get("signature") || "Non signé" }
+    ]
+  };
+
+  fetch(webhookURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ embeds: [embed] })
+  });
 }
 </script>
+
 </body>
 </html>
