@@ -1,247 +1,542 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>ASU – Rapport de Vol</title>
-
-    <style>
-        body {
-            background: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        section {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-
-        .bloc {
-            background: #2a2a2a;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px 0;
-            border-radius: 5px;
-            border: none;
-        }
-
-        textarea {
-            height: 120px;
-        }
-
-        button {
-            background: #004aad;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        button:hover {
-            background: #0066ff;
-        }
-
-        /* --- VERSION MOBILE RESPONSIVE --- */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                font-size: 15px;
-            }
-
-            h1 {
-                font-size: 22px;
-                margin-bottom: 20px;
-            }
-
-            section {
-                padding: 15px;
-                margin-bottom: 20px;
-            }
-
-            .bloc {
-                padding: 12px;
-            }
-
-            input, select, textarea {
-                font-size: 15px;
-                padding: 10px;
-            }
-
-            textarea {
-                height: 100px;
-            }
-
-            button {
-                width: 100%;
-                margin-bottom: 10px;
-                font-size: 17px;
-                padding: 14px;
-            }
-
-            img {
-                width: 110px !important;
-            }
-        }
-
-        /* --- ULTRA MOBILE --- */
-        @media (max-width: 420px) {
-            h1 {
-                font-size: 18px;
-            }
-
-            section {
-                padding: 12px;
-            }
-
-            input, select, textarea {
-                font-size: 14px;
-            }
-
-            button {
-                font-size: 16px;
-                padding: 12px;
-            }
-        }
-    </style>
-
-    <!-- Librairie PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <title>ASU - Rapport de vol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f3b5b 0, #050814 55%, #020308 100%);
+      color: #f5f7fb;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(5, 10, 25, 0.92);
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(120, 180, 255, 0.25);
+      padding: 18px 18px 26px;
+      backdrop-filter: blur(10px);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(120, 180, 255, 0.25);
+    }
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    h1 {
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      font-size: 0.8rem;
+      color: #9fb4d9;
+    }
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(120, 180, 255, 0.5);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #cfe2ff;
+      background: linear-gradient(135deg, rgba(40, 90, 160, 0.8), rgba(10, 25, 60, 0.9));
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .section {
+      background: radial-gradient(circle at top left, rgba(60, 110, 190, 0.18), rgba(10, 15, 35, 0.95));
+      border-radius: 14px;
+      padding: 12px 12px 14px;
+      border: 1px solid rgba(120, 180, 255, 0.18);
+    }
+    .section-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #cfe2ff;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-title span {
+      font-size: 0.7rem;
+      color: #7f93b8;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    label {
+      font-size: 0.78rem;
+      color: #cfd8f5;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+      background: rgba(5, 10, 25, 0.9);
+      border-radius: 9px;
+      border: 1px solid rgba(120, 180, 255, 0.35);
+      padding: 7px 9px;
+      color: #f5f7fb;
+      font-size: 0.8rem;
+      outline: none;
+      width: 100%;
+    }
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: #6f7fa5;
+      font-size: 0.75rem;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(10, 20, 45, 0.95);
+      border: 1px solid rgba(120, 180, 255, 0.35);
+      font-size: 0.72rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip input {
+      accent-color: #4ea3ff;
+    }
+    .footer-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-primary {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #2f7bff, #00c6ff);
+      color: #f5f7fb;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 150, 255, 0.45);
+    }
+    .btn-secondary {
+      width: 100%;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(120, 180, 255, 0.4);
+      background: rgba(5, 10, 25, 0.9);
+      color: #cfe2ff;
+      cursor: pointer;
+    }
+    .hint {
+      font-size: 0.7rem;
+      color: #7f93b8;
+      text-align: center;
+      margin-top: 2px;
+    }
+    @media (max-width: 640px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .app { padding: 14px 12px 20px; }
+      header { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <header>
+      <div class="title-block">
+        <h1>ASU - Rapport de vol</h1>
+        <div class="subtitle">Unité aérienne | Modèle opérationnel complet</div>
+      </div>
+      <div class="badge">CARLES37000 • LIVE OPS</div>
+    </header>
 
-<h1>🛫 ASU – Rapport de Vol Officiel</h1>
+    <form id="asuForm">
+      <!-- SECTION 1 : Infos vol -->
+      <div class="section">
+        <div class="section-title">
+          Informations vol
+          <span>Identité mission & aéronef</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Numéro de vol</label>
+            <input type="text" id="vol" placeholder="Ex : ASU-01 / AIR-1">
+          </div>
+          <div class="field">
+            <label>Type de mission</label>
+            <select id="mission">
+              <option value="">Sélectionner…</option>
+              <option>Surveillance</option>
+              <option>Appui au sol</option>
+              <option>Poursuite</option>
+              <option>Reconnaissance</option>
+              <option>Transport</option>
+              <option>Évacuation</option>
+            </select>
+          </div>
+        </div>
 
-<div style="text-align:center; margin-bottom:20px;">
-    <!-- Logo ASU / LSPD -->
-    <img src="https://i.imgur.com/8yZ8FhL.png" width="140">
-</div>
+        <div class="grid-2" style="margin-top:8px;">
+          <div class="field">
+            <label>Zone d’opération</label>
+            <input type="text" id="zone" placeholder="Ex : Downtown, Vespucci, Sandy…">
+          </div>
+          <div class="field">
+            <label>Type d’appareil</label>
+            <input type="text" id="appareil" placeholder="Ex : Hélico ASU, Air-1…">
+          </div>
+        </div>
+      </div>
 
-<section id="rapport">
-    <h2>Informations du vol</h2>
+      <!-- SECTION 2 : Équipage -->
+      <div class="section">
+        <div class="section-title">
+          Équipage
+          <span>Composition & rôles</span>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Pilote</label>
+            <input type="text" id="pilote" placeholder="Nom / indicatif">
+          </div>
+          <div class="field">
+            <label>Co-pilote</label>
+            <input type="text" id="copilote" placeholder="Nom / indicatif">
+          </div>
+          <div class="field">
+            <label>Tactique</label>
+            <input type="text" id="tactique" placeholder="Opérateur / observateur">
+          </div>
+        </div>
+      </div>
 
-    <div class="bloc">
-        <label>Numéro de vol :</label>
-        <input id="vol" type="text" placeholder="Ex : ASU-01">
+      <!-- SECTION 3 : Temps & déroulement -->
+      <div class="section">
+        <div class="section-title">
+          Déroulement du vol
+          <span>Temps & résumé</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Décollage</label>
+            <input type="datetime-local" id="decollage">
+          </div>
+          <div class="field">
+            <label>Atterrissage</label>
+            <input type="datetime-local" id="atterrissage">
+          </div>
+        </div>
 
-        <label>Type de mission :</label>
-        <select id="mission">
-            <option>Surveillance aérienne</option>
-            <option>Appui au sol</option>
-            <option>Poursuite</option>
-            <option>Transport d’unité</option>
-            <option>Recherche / Secours</option>
-        </select>
+        <div class="grid-3" style="margin-top:8px;">
+          <div class="field">
+            <label>Temps moteur (min)</label>
+            <input type="number" id="tempsMoteur" min="0" placeholder="Ex : 45">
+          </div>
+          <div class="field">
+            <label>Temps rotor (min)</label>
+            <input type="number" id="tempsRotor" min="0" placeholder="Ex : 40">
+          </div>
+          <div class="field">
+            <label>Temps total mission (min)</label>
+            <input type="number" id="tempsTotal" min="0" placeholder="Ex : 60">
+          </div>
+        </div>
 
-        <label>Zone d’opération :</label>
-        <input id="zone" type="text" placeholder="Ex : Downtown, Vespucci…">
-    </div>
+        <div class="field" style="margin-top:8px;">
+          <label>Résumé du vol</label>
+          <textarea id="resume" placeholder="Décrire le déroulement global de la mission, les phases clés, les interventions, les points notables…"></textarea>
+        </div>
+      </div>
 
-    <div class="bloc">
-        <h3>Équipage</h3>
-        <label>Pilote :</label>
-        <input id="pilote" type="text">
+      <!-- SECTION 4 : Météo -->
+      <div class="section">
+        <div class="section-title">
+          Météo
+          <span>Conditions au moment du vol</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Vent (kt / direction)</label>
+            <input type="text" id="vent" placeholder="Ex : 8 kt / 230°">
+          </div>
+          <div class="field">
+            <label>QNH / Pression</label>
+            <input type="text" id="qnh" placeholder="Ex : 1015 hPa">
+          </div>
+        </div>
 
-        <label>Co-pilote :</label>
-        <input id="copilote" type="text">
+        <div class="chips">
+          <label class="chip">
+            <input type="checkbox" id="meteoVentFaible"> Vent faible
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoVentModere"> Vent modéré
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoVentFort"> Vent fort
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoVisiBonne"> Visibilité bonne
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoVisiMoy"> Visibilité moyenne
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoVisiMauvaise"> Visibilité mauvaise
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoCielDegage"> Ciel dégagé
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoNuageux"> Nuageux
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoPluie"> Pluie
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoOrage"> Orage
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoJour"> Jour
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="meteoNuit"> Nuit
+          </label>
+        </div>
+      </div>
 
-        <label>Technicien :</label>
-        <input id="technicien" type="text">
-    </div>
+      <!-- SECTION 5 : Carburant -->
+      <div class="section">
+        <div class="section-title">
+          Carburant
+          <span>Plein & consommation</span>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Carburant départ (L)</label>
+            <input type="number" id="carbDepart" min="0" placeholder="Ex : 600">
+          </div>
+          <div class="field">
+            <label>Carburant arrivée (L)</label>
+            <input type="number" id="carbArrivee" min="0" placeholder="Ex : 320">
+          </div>
+          <div class="field">
+            <label>Consommation estimée (L)</label>
+            <input type="number" id="carbConso" min="0" placeholder="Ex : 280">
+          </div>
+        </div>
 
-    <div class="bloc">
-        <h3>Déroulement du vol</h3>
-        <label>Décollage :</label>
-        <input id="decollage" type="time">
+        <div class="chips">
+          <label class="chip">
+            <input type="checkbox" id="pleinEffectue"> Plein effectué avant vol
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="pleinNonEffectue"> Plein non effectué
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="carbSuffisant"> Carburant suffisant
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="carbLimite"> Carburant limite
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="consoNormale"> Consommation normale
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="consoElevee"> Consommation élevée
+          </label>
+        </div>
+      </div>
 
-        <label>Atterrissage :</label>
-        <input id="atterrissage" type="time">
+      <!-- SECTION 6 : Avaries / anomalies -->
+      <div class="section">
+        <div class="section-title">
+          Avaries / anomalies
+          <span>Technique & ressenti équipage</span>
+        </div>
+        <div class="chips">
+          <label class="chip">
+            <input type="checkbox" id="avarieRAS"> RAS
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieRadio"> Problème radio
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieFLIR"> Problème caméra / FLIR
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieRotor"> Problème rotor
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieMoteur"> Problème moteur
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieInstruments"> Problème instruments
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieVibrations"> Vibrations anormales
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="avarieAlerte"> Alerte tableau de bord
+          </label>
+        </div>
+        <div class="field" style="margin-top:8px;">
+          <label>Détails des avaries / remarques techniques</label>
+          <textarea id="avarieDetails" placeholder="Préciser les anomalies, leur impact sur le vol, les actions prises, recommandations maintenance…"></textarea>
+        </div>
+      </div>
 
-        <label>Résumé :</label>
-        <textarea id="resume"></textarea>
-    </div>
-</section>
+      <!-- SECTION 7 : Conditions de vol & matériel -->
+      <div class="section">
+        <div class="section-title">
+          Conditions & matériel
+          <span>Profil de vol & équipements</span>
+        </div>
+        <div class="chips">
+          <label class="chip">
+            <input type="checkbox" id="condVFR"> VFR
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="condIFR"> IFR
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="turbFaible"> Turbulences faibles
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="turbModerees"> Turbulences modérées
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="turbFortes"> Turbulences fortes
+          </label>
+        </div>
 
-<button id="pdfBtn">📄 Générer PDF</button>
-<button id="webhookBtn">📤 Envoyer au Discord</button>
+        <div class="chips" style="margin-top:6px;">
+          <label class="chip">
+            <input type="checkbox" id="matFLIR"> Caméra FLIR
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="matProjecteur"> Projecteur
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="matRadioLP"> Radio longue portée
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="matSecours"> Kit secours
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="matArmement"> Armement RP
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="matGPS"> GPS tactique
+          </label>
+        </div>
+      </div>
 
-<script>
-/* -------- PDF -------- */
-document.getElementById("pdfBtn").addEventListener("click", () => {
-    const element = document.getElementById("rapport");
+      <!-- SECTION 8 : Observations tactiques & conclusion -->
+      <div class="section">
+        <div class="section-title">
+          Observations & conclusion
+          <span>Résultat mission & remarques</span>
+        </div>
+        <div class="chips">
+          <label class="chip">
+            <input type="checkbox" id="resMissionOK"> Mission accomplie
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="resMissionPartielle"> Mission partielle
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="resMissionAnnulee"> Mission annulée
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="resInterSol"> Intervention au sol nécessaire
+          </label>
+          <label class="chip">
+            <input type="checkbox" id="resAucunIncident"> Aucun incident
+          </label>
+        </div>
 
-    const opt = {
-        margin: 10,
-        filename: "ASU_Rapport.pdf",
-        image: { type: "jpeg", quality: 1 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-    };
+        <div class="field" style="margin-top:8px;">
+          <label>Observations tactiques</label>
+          <textarea id="obsTactiques" placeholder="Zones survolées, points d’intérêt, contacts visuels, appui au sol, poursuites, interventions…"></textarea>
+        </div>
 
-    html2pdf().set(opt).from(element).save();
-});
+        <div class="grid-2" style="margin-top:8px;">
+          <div class="field">
+            <label>Recommandations</label>
+            <textarea id="recommandations" placeholder="Améliorations, points à surveiller, consignes futures…"></textarea>
+          </div>
+          <div class="field">
+            <label>Signature pilote / indicatif</label>
+            <input type="text" id="signature" placeholder="Ex : AIR-1 / CARLES37000">
+          </div>
+        </div>
+      </div>
 
-/* -------- WEBHOOK DISCORD -------- */
-document.getElementById("webhookBtn").addEventListener("click", async () => {
-    const webhookURL = "https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT"; // <-- mets ton webhook ici
-
-    const payload = {
-        username: "ASU – Rapport de Vol",
-        avatar_url: "https://i.imgur.com/8yZ8FhL.png",
-        embeds: [
-            {
-                title: "🛫 Rapport de Vol – ASU",
-                color: 3447003,
-                thumbnail: { url: "https://i.imgur.com/8yZ8FhL.png" },
-                fields: [
-                    { name: "Numéro de vol", value: document.getElementById("vol").value || "Non renseigné" },
-                    { name: "Mission", value: document.getElementById("mission").value },
-                    { name: "Zone", value: document.getElementById("zone").value || "Non renseigné" },
-
-                    { name: "Pilote", value: document.getElementById("pilote").value || "Non renseigné", inline: true },
-                    { name: "Co-pilote", value: document.getElementById("copilote").value || "Non renseigné", inline: true },
-                    { name: "Technicien", value: document.getElementById("technicien").value || "Non renseigné", inline: true },
-
-                    { name: "Décollage", value: document.getElementById("decollage").value || "Non renseigné", inline: true },
-                    { name: "Atterrissage", value: document.getElementById("atterrissage").value || "Non renseigné", inline: true },
-
-                    { name: "Résumé", value: document.getElementById("resume").value || "Aucun résumé fourni" }
-                ],
-                footer: {
-                    text: "LSPD – Air Support Unit",
-                    icon_url: "https://i.imgur.com/8yZ8FhL.png"
-                }
-            }
-        ]
-    };
-
-    await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-
-    alert("Rapport envoyé au Discord !");
-});
-</script>
-
+      <!-- FOOTER -->
+      <div class="footer-actions">
+        <button type="button" class="btn-primary">
+          Générer / envoyer le rapport
+        </button>
+        <button type="reset" class="btn-secondary">
+          Réinitialiser le formulaire
+        </button>
+        <div class="hint">
+          Ce modèle est prêt pour que tu branches ton script PDF + webhook Discord derrière.
+        </div>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
