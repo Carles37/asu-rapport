@@ -172,11 +172,10 @@
         <h1>ASU - Rapport de vol</h1>
         <div class="subtitle">Unité aérienne | Modèle opérationnel complet</div>
       </div>
-      <div class="badge">BAMAKO • LIVE OPS</div>
+      <div class="badge">CARLES37000 • LIVE OPS</div>
     </header>
 
     <form id="asuForm">
-
             <!-- SECTION 1 -->
       <div class="section">
         <div class="section-title">Informations vol</div>
@@ -379,22 +378,24 @@
 
       <!-- FOOTER -->
       <div class="footer-actions">
-        <button type="button" class="btn-primary" onclick="envoyerRapport()">Envoyer le rapport</button>
+        <button type="button" class="btn-primary" onclick="envoyerRapport(); genererEtEnvoyerPDF();">
+          Envoyer le rapport + PDF
+        </button>
         <button type="reset" class="btn-secondary">Réinitialiser</button>
       </div>
 
     </form>
   </div>
-
- <script>
+<script>
 const webhookURL = "https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT";
 
 function envoyerRapport() {
 
   const get = id => document.getElementById(id)?.value || "";
-  const chk = ids => ids.filter(id => document.getElementById(id)?.checked)
-                        .map(id => document.getElementById(id).parentElement.innerText.trim())
-                        .join(", ") || "Aucun";
+  const chk = ids => ids
+    .filter(id => document.getElementById(id)?.checked)
+    .map(id => document.getElementById(id).parentElement.innerText.trim())
+    .join(", ") || "Aucun";
 
   const embed = {
     title: "📡 Rapport ASU – CARLES37000",
@@ -415,22 +416,27 @@ function envoyerRapport() {
 
       { name: "Météo", value:
         `Vent : ${get("vent")}\nQNH : ${get("qnh")}\nConditions : ${
-          chk(["meteoVentFaible","meteoVentModere","meteoVentFort",
-               "meteoVisiBonne","meteoVisiMoy","meteoVisiMauvaise",
-               "meteoCielDegage","meteoNuageux","meteoPluie","meteoOrage",
-               "meteoJour","meteoNuit"])
+          chk([
+            "meteoVentFaible","meteoVentModere","meteoVentFort",
+            "meteoVisiBonne","meteoVisiMoy","meteoVisiMauvaise",
+            "meteoCielDegage","meteoNuageux","meteoPluie","meteoOrage",
+            "meteoJour","meteoNuit"
+          ])
         }` },
 
       { name: "Carburant", value:
         `Départ : ${get("carbDepart")} L\nArrivée : ${get("carbArrivee")} L\nConso : ${get("carbConso")} L\nOptions : ${
-          chk(["pleinEffectue","pleinNonEffectue","carbSuffisant","carbLimite","consoNormale","consoElevee"])
+          chk([
+            "pleinEffectue","pleinNonEffectue","carbSuffisant",
+            "carbLimite","consoNormale","consoElevee"
+          ])
         }` },
 
       { name: "Avaries", value:
-        `${chk(["avarieRAS","avarieRadio","avarieFLIR","avarieRotor",
-                "avarieMoteur","avarieInstruments","avarieVibrations","avarieAlerte"])}
-        
-        Détails : ${get("avarieDetails") || "RAS"}` },
+        `${chk([
+          "avarieRAS","avarieRadio","avarieFLIR","avarieRotor",
+          "avarieMoteur","avarieInstruments","avarieVibrations","avarieAlerte"
+        ])}\n\nDétails : ${get("avarieDetails") || "RAS"}` },
 
       { name: "Conditions de vol", value:
         chk(["condVFR","condIFR","turbFaible","turbModerees","turbFortes"]) },
@@ -454,6 +460,48 @@ function envoyerRapport() {
   });
 }
 </script>
+<!-- Librairie PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+async function genererEtEnvoyerPDF() {
+
+  const element = document.querySelector(".app");
+
+  const opt = {
+    margin: 0.5,
+    filename: "rapport_asu.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "cm", format: "a4", orientation: "portrait" }
+  };
+
+  const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
+
+  const formData = new FormData();
+  formData.append("file", pdfBlob, "rapport_asu.pdf");
+
+  const payload = {
+    embeds: [
+      {
+        title: "📄 Rapport ASU – PDF généré",
+        description: "Le rapport complet est disponible en pièce jointe.",
+        color: 3447003
+      }
+    ]
+  };
+
+  formData.append("payload_json", JSON.stringify(payload));
+
+  await fetch("https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT", {
+    method: "POST",
+    body: formData
+  });
+
+  alert("PDF généré et envoyé dans Discord !");
+}
+</script>
 
 </body>
 </html>
+
