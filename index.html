@@ -198,7 +198,7 @@
         <h1>ASU - Rapport de vol</h1>
         <div class="subtitle">Unité aérienne | Modèle opérationnel complet</div>
       </div>
-      <div class="badge">CARLES37000 • LIVE OPS</div>
+      <div class="badge">BAMAKO • LIVE OPS</div>
     </header>
 
     <form id="asuForm">
@@ -538,5 +538,21 @@
       </div>
     </form>
   </div>
+  <script>
+const webhookURL = "https://discord.com/api/webhooks/1517134256311238859/taFSoamWWzAzxH7oGaFPyeNoku-BBN4D2BiGWx0SEHb17z5J_D1sDlUkT09r7xnZRUdT";
+
+// Exemple d’envoi simple (je te ferai la version complète après)
+function envoyerRapport() {
+    const data = {
+        content: "Nouveau rapport ASU envoyé.",
+    };
+
+    fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+}
+</script>
 </body>
 </html>
